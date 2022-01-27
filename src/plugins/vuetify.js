@@ -1,9 +1,19 @@
 import Vue from "vue";
 import Vuetify from "vuetify/lib/framework";
+import en from "@/locales/en.js";
+import ar from "@/locales/ar.js";
 
 Vue.use(Vuetify);
 
 export default new Vuetify({
+  rtl: false,
+  lang: {
+    locales: {
+      en,
+      ar,
+    },
+    current: "en",
+  },
   theme: {
     options: {
       customProperties: true,
