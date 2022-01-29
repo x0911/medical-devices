@@ -1,0 +1,41 @@
+.v-treeview {
+  &.order-select-box-last {
+    .v-treeview-node {
+      &__root {
+        transition: background-color 0.15s linear;
+        .v-treeview-node__checkbox {
+          order: 12;
+        }
+        .v-treeview-node__content {
+          .v-treeview-node__label {
+            .v-input {
+              .v-input__control {
+                .v-input__slot {
+                  transition: background-color 0.15s linear;
+                  fieldset {
+                    transition: border 0.15s linear;
+                  }
+                }
+              }
+              &:not(.v-input--is-focused) {
+                .v-input__control {
+                  .v-input__slot {
+                    background-color: transparent !important;
+                    fieldset {
+                      border: 2px solid transparent !important;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      &.v-treeview-node--selected {
+        .v-treeview-node__root {
+          background-color: rgba(0, 123, 255, 0.15);
+        }
+      }
+    }
+  }
+}

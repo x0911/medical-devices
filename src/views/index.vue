@@ -4,16 +4,16 @@
       <v-btn
         v-if="activeItem.length > 1"
         text
-        @click="activeItem = activeItem.substring(0, activeItem.length - 2)"
+        :to="`/${activeItem.substring(0, activeItem.length - 2)}`"
       >
         <v-icon class="me-2">mdi-keyboard-backspace</v-icon>
         Back
       </v-btn>
     </div>
-    <div class="mt-16 pt-16">
+    <div class="mt-16">
       <v-row>
         <template v-for="(item, i) in itemFiltered">
-          <v-col :key="i" cols="12" sm="6" md="4">
+          <v-col :key="i" cols="6" sm="6" md="4" lg="3" xl="2">
             <v-slide-y-transition hide-on-leave>
               <v-card
                 v-if="showCard"
@@ -22,10 +22,10 @@
                 style="box-shadow: 2px 4px 10px #ddd"
                 rounded="lg"
                 class="pt-4"
-                @click="
-                  item.childs && item.childs.length > 0
-                    ? (activeItem += item.id + '-')
-                    : () => {}
+                :to="
+                  item.children && item.children.length > 0
+                    ? `/${activeItem}${item.id}-`
+                    : null
                 "
               >
                 <v-img
@@ -41,6 +41,7 @@
                 <v-card-title
                   style="word-break: break-word"
                   class="d-block text-center"
+                  :class="{ 'text-body-1': $vuetify.breakpoint.xs }"
                 >
                   {{ item.name }}
                 </v-card-title>
@@ -59,7 +60,6 @@ export default {
   name: "Home",
   components: {},
   data: () => ({
-    activeItem: "",
     items,
     showCard: true,
   }),
@@ -75,11 +75,14 @@ export default {
         splitter.forEach((index) => {
           if (index) {
             const i = parseInt(index);
-            filteredItems = [...items.find((item) => item.id === i).childs];
+            filteredItems = [...items.find((item) => item.id === i).children];
           }
         });
       }
       return filteredItems;
+    },
+    activeItem() {
+      return this.$route.params.id || "";
     },
   },
   watch: {

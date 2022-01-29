@@ -7,6 +7,7 @@ import vuetify from "./plugins/vuetify";
 import "roboto-fontface/css/roboto/roboto-fontface.css";
 import "@mdi/font/css/materialdesignicons.css";
 import extensions from "./extensions/index";
+import "@/assets/scss/index.scss";
 
 extensions.forEach((ext) => {
   require(`@/extensions/${ext}.js`);

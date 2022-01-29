@@ -1,6 +1,11 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-model="drawer" app :right="$vuetify.rtl">
+    <v-navigation-drawer
+      v-if="!isControlPanel"
+      v-model="drawer"
+      app
+      :right="$vuetify.rtl"
+    >
       <div class="text-center">
         <v-avatar tile size="180" height="100">
           <v-img contain :src="require('@/assets/images/logo.jpg')"></v-img>
@@ -14,7 +19,7 @@
                 {{ item.name }}
               </v-list-item-title>
             </template>
-            <template v-for="(child, ci) in item.childs">
+            <template v-for="(child, ci) in item.children">
               <v-list-item :key="ci" link>
                 <v-list-item-content>
                   <v-list-item-title>
@@ -28,11 +33,24 @@
       </v-list>
     </v-navigation-drawer>
     <v-app-bar app>
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-app-bar-title v-if="!$vuetify.breakpoint.xs" class="mr-12">
+      <v-app-bar-nav-icon
+        v-if="!isControlPanel"
+        @click="drawer = !drawer"
+      ></v-app-bar-nav-icon>
+      <v-btn v-if="isControlPanel" icon to="/">
+        <v-icon>mdi-keyboard-backspace</v-icon>
+      </v-btn>
+      <v-toolbar-title
+        v-if="!$vuetify.breakpoint.xs || isControlPanel"
+        class="mr-12"
+      >
         Medical Devices
-      </v-app-bar-title>
+        <span v-if="isControlPanel" class="text-caption font-weight-medium"
+          >&nbsp;Control Panel</span
+        >
+      </v-toolbar-title>
       <v-toolbar-items
+        v-if="!isControlPanel"
         class="pt-1 flex-grow-1"
         :class="{ 'pt-2': $vuetify.breakpoint.smAndDown }"
       >
@@ -72,13 +90,30 @@ export default {
       const pushItem = (arr) => {
         arr.forEach((item) => {
           values.push(item.name);
-          if (item.childs?.length > 0) {
-            pushItem(item.childs);
+          if (item.children?.length > 0) {
+            pushItem(item.children);
           }
         });
       };
       pushItem(items);
       return values;
+    },
+    isControlPanel() {
+      const path = this.$route.path;
+      if (path === "/control-panel") {
+        return true;
+      } else {
+        return false;
+      }
+    },
+  },
+  watch: {
+    isControlPanel(v) {
+      if (!v) {
+        setTimeout(() => {
+          this.$set(this, "drawer", null);
+        }, 250);
+      }
     },
   },
 };
